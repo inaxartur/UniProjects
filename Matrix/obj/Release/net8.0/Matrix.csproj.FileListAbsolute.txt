@@ -1,0 +1,14 @@
+C:\Users\artig\Desktop\Matrix\Matrix\bin\Release\net8.0\Matrix.exe
+C:\Users\artig\Desktop\Matrix\Matrix\bin\Release\net8.0\Matrix.deps.json
+C:\Users\artig\Desktop\Matrix\Matrix\bin\Release\net8.0\Matrix.runtimeconfig.json
+C:\Users\artig\Desktop\Matrix\Matrix\bin\Release\net8.0\Matrix.dll
+C:\Users\artig\Desktop\Matrix\Matrix\bin\Release\net8.0\Matrix.pdb
+C:\Users\artig\Desktop\Matrix\Matrix\obj\Release\net8.0\Matrix.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\artig\Desktop\Matrix\Matrix\obj\Release\net8.0\Matrix.AssemblyInfoInputs.cache
+C:\Users\artig\Desktop\Matrix\Matrix\obj\Release\net8.0\Matrix.AssemblyInfo.cs
+C:\Users\artig\Desktop\Matrix\Matrix\obj\Release\net8.0\Matrix.csproj.CoreCompileInputs.cache
+C:\Users\artig\Desktop\Matrix\Matrix\obj\Release\net8.0\Matrix.dll
+C:\Users\artig\Desktop\Matrix\Matrix\obj\Release\net8.0\refint\Matrix.dll
+C:\Users\artig\Desktop\Matrix\Matrix\obj\Release\net8.0\Matrix.pdb
+C:\Users\artig\Desktop\Matrix\Matrix\obj\Release\net8.0\Matrix.genruntimeconfig.cache
+C:\Users\artig\Desktop\Matrix\Matrix\obj\Release\net8.0\ref\Matrix.dll
