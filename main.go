@@ -1,6 +1,6 @@
 package main
 
-// IMPLEMENTACJA SEMFAFORU
+// IMPLEMENTACJA BARIERY
 
 import (
 	"fmt"
@@ -9,68 +9,61 @@ import (
 	"time"
 )
 
-type sem struct {
-	counter uint32
-	mtx     sync.Mutex
-	cnd     *sync.Cond
+type Barrier struct {
+	lock          sync.Mutex
+	barrier_count int
+	thread_count  int
 }
 
-var funcID = 0
-var globMtx sync.Mutex
-var wg sync.WaitGroup
-
-func myfunc(semaphore *sem) {
-	defer wg.Done()
-
-	globMtx.Lock()
-	var localID = funcID
-	funcID++
-	globMtx.Unlock()
-
-	sem_wait(semaphore)
-
-	fmt.Printf("funkcja %v zaczyna obliczenia\n", localID)
-	for i := 0; i < 5; i++ {
-		time.Sleep(time.Millisecond * (time.Duration(rand.Int31n(400) + 100)))
+func barrier_init(thread_count int) *Barrier {
+	return &Barrier{
+		lock:          sync.Mutex{},
+		barrier_count: 0,
+		thread_count:  thread_count,
 	}
-	fmt.Printf("Funkcja %v skonczyla obliczenia\n", localID)
-
-	sem_post(semaphore)
-
 }
+
+func (b *Barrier) barrier_wait() {
+	b.lock.Lock()
+	b.barrier_count++
+	b.lock.Unlock()
+
+	// active waiting
+	for {
+		if b.barrier_count >= b.thread_count {
+			b.lock.Lock()
+			b.barrier_count = 0
+			b.lock.Unlock()
+			break
+		}
+	}
+}
+
+func doSomething() {
+	defer wg.Done()
+	fmt.Println("Doing something...")
+	time.Sleep(time.Millisecond * (time.Duration(rand.Int31n(2000) + 100)))
+	fmt.Println("Done something, waiting for barrier")
+	barrier.barrier_wait()
+	fmt.Println("Barrier raised, continuing")
+
+	fmt.Println("Doing something...")
+	time.Sleep(time.Millisecond * (time.Duration(rand.Int31n(2000) + 100)))
+	fmt.Println("Done something, waiting for barrier")
+	barrier.barrier_wait()
+	fmt.Println("Barrier raised, continuing")
+}
+
+var wg sync.WaitGroup
+var threadCount int = 4
+var barrier *Barrier = barrier_init(threadCount)
 
 func main() {
-	wg.Add(5)
 	defer wg.Wait()
+	wg.Add(threadCount)
 
-	var sem1 sem
-	sem_init(&sem1, 2)
-
-	go myfunc(&sem1)
-	go myfunc(&sem1)
-	go myfunc(&sem1)
-	go myfunc(&sem1)
-	go myfunc(&sem1)
-
-}
-
-func sem_init(s *sem, x uint32) {
-	s.counter = x
-	s.cnd = sync.NewCond(&s.mtx)
-}
-
-func sem_wait(semaphore *sem) {
-	semaphore.mtx.Lock()
-	for semaphore.counter == 0 {
-		semaphore.cnd.Wait()
+	for i := 0; i < threadCount; i++ {
+		go doSomething()
 	}
-	semaphore.counter--
-	semaphore.mtx.Unlock()
-}
 
-func sem_post(semaphore *sem) {
-	semaphore.mtx.Lock()
-	semaphore.counter++
-	semaphore.cnd.Signal()
-	semaphore.mtx.Unlock()
 }
